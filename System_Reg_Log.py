@@ -41,21 +41,34 @@ def fulk(p,p1,n,s):
     else:
         return True
 
-def mutfunc(x,y):
+def mutfunc(x,y,m):
     lg=[]
     with open("Sys.txt","r",encoding="utf-8-sig") as f:
         for i in f:
             lg.append(i.strip().split(","))
     x1=x.get()
     y1=y.get()
-    if len(x1)==0 or x1 in [j[0] for j in lg]:
+    if x1 not in [j[0] for j in lg]:
         x.configure(bg="Red")
     else:
-        x.configure(bg="Gray")
-    if y1==x1 or y1 in [j[0] for j in lg]:
+        x.configure(bg="White")
+    if len(y1)==0 or y1==x1 or y1 in [j[m] for j in lg]:
         y.configure(bg="Red")
     else:
-        y.configure(bg="Gray")
+        y.configure(bg="White")
+    if x1 in [j[m] for j in lg] and len(y1)!=0 and y1!=x1 and y1 not in [j[m] for j in lg]:
+        ind=[j[m] for j in lg].index(x1) 
+        lg[ind][m]=y1
+        lg1=[]
+        for i in lg:
+            lg1.extend(i)
+        for i in range(0,len(lg1)):
+            lg1[i]+=","
+        for i in range(0,len(lg1),3):
+            if i!=0: lg1.insert(i,"\n")
+        print(lg1)
+        with open("Sys.txt","w",encoding="utf-8-sig") as f:
+            f.writelines(lg1)
 
 def mut():
     lg=[]
@@ -68,15 +81,36 @@ def mut():
     nwin.title("Muuda nimi") 
     lblt=Label(nwin,text="Muuda nimi",font="Arial 20")
     lbln=Label(nwin,text="Kirjuta praegune nimi",font="Arial 20")
-    entn=Entry(nwin,bg="Gray",fg="Black",font="Arial 20")
+    entn=Entry(nwin,bg="White",fg="Black",font="Arial 20")
     lblnn=Label(nwin,text="Kirjuta uus nimi",font="Arial 20")
-    entnn=Entry(nwin,bg="Gray",fg="Black",font="Arial 20") 
-    btnv=Button(nwin,bg="Gray",fg="Black",font="Arial 20", command=lambda: mutfunc(entn,entnn)) 
+    entnn=Entry(nwin,bg="White",fg="Black",font="Arial 20") 
+    btnv=Button(nwin,text="Muuda",bg="Gray",fg="Black",font="Arial 20", command=lambda: mutfunc(entn,entnn,0)) 
     lblt.pack(pady=50)
     lst=[lbln,entn,lblnn,entnn,btnv]
     for item in lst:
         item.pack()
 
+    nwin.mainloop()
+
+def mut1():
+    lg=[]
+    with open("Sys.txt","r",encoding="utf-8-sig") as f:
+        for i in f:
+            lg.append(i.strip().split(","))
+    global var
+    nwin=Tk()
+    nwin.geometry("600x600")
+    nwin.title("Muuda parool") 
+    lblt=Label(nwin,text="Muuda parool",font="Arial 20")
+    lbln=Label(nwin,text="Kirjuta praegune parool",font="Arial 20")
+    entn=Entry(nwin,bg="White",fg="Black",font="Arial 20")
+    lblnn=Label(nwin,text="Kirjuta uus parool",font="Arial 20")
+    entnn=Entry(nwin,bg="White",fg="Black",font="Arial 20") 
+    btnv=Button(nwin,text="Muuda",bg="Gray",fg="Black",font="Arial 20", command=lambda: mutfunc(entn,entnn,1)) 
+    lblt.pack(pady=50)
+    lst=[lbln,entn,lblnn,entnn,btnv]
+    for item in lst:
+        item.pack()
     nwin.mainloop()
 
 def lug(lst,entx,enty,win,o):
@@ -106,7 +140,9 @@ def lug(lst,entx,enty,win,o):
         sis.mainloop()
     elif x in msx and y in msy and o==0: 
         bt=Button(win,text="Muuda nimi",font="Arial 20",fg="Black",bg="Gray",command=mut)
+        bt1=Button(win,text="Muuda parool",font="Arial 20",fg="Black",bg="Gray",command=mut1)
         bt.pack(side=LEFT)
+        bt1.pack(side=LEFT)
 
 def kontrol(x,y,z,i,btn):
     lg=[]
@@ -148,7 +184,8 @@ def stul(win=None):
     with open("Sys.txt","r",encoding="utf-8-sig") as f:
         for i in f:
             lg.append(i.strip().split(","))
-    if v==1:
+    if v==1: 
+
         reg=Tk()
         reg.geometry("600x800")
         reg.title("Registreerimine")
@@ -205,7 +242,7 @@ def stul(win=None):
     if v==4:
         print()
 
-def lop(event):
+def lop(win):
     win.destroy()
 
 win=Tk()
@@ -220,9 +257,7 @@ rblog=Radiobutton(win,text="Autoriseerimine",font="Arial 30",fg="Blue",variable=
 rbmut=Radiobutton(win,text="Nime või parooli muutmine",font="Arial 30",fg="Orange",variable=var,value=3)
 rbun=Radiobutton(win,text="Unustanud parooli taastamine",font="Arial 30",fg="Orange",variable=var,value=4)
 btngo=Button(win,text="Alusta",font="Arial 30",fg="Black",bg="Green", command=lambda: stul(win))
-btnlop=Button(win,text="Lõpetamine",font="Arial 30",fg="Black",bg="Red")
-
-btnlop.bind("<Button-1>",lop)
+btnlop=Button(win,text="Lõpetamine",font="Arial 30",fg="Black",bg="Red",command=lambda:lop(win))
 
 lst=[lbl,rblog,rbreg,rbmut,rbun,btnlop,btngo]
 for i in range(len(lst)):
