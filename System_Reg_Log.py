@@ -1,6 +1,7 @@
 from tkinter import * 
 
 def ispas(x):
+    lg=[]
     x=list(x)
     lst=[] 
     sym="~!#¤%&/()=?@£$€{[]}*-+.;:_"
@@ -25,17 +26,93 @@ def ispas(x):
     else:
         return all(lst)
 
-def fulk(p,n,s):
+def fulk(p,p1,n,s):
+    lg=[]
+    with open("Sys.txt","r",encoding="utf-8-sig") as f:
+        for i in f:
+            lg.append(i.strip().split(","))
     p=p.get()
-    p=ispas(p) 
+    pu=ispas(p)
+    p1=p1.get()
     n=n.get() 
     s=s.get()
-    if len(n)==0 or len(s)==0 or p==False:
+    if p!=p1 or len(n)==0 or n in [j[0] for j in lg] or len(s)==0 or pu==False:
         return False
     else:
         return True
 
-def kontrol(x,y,z,i,reg):
+def mutfunc(x,y):
+    lg=[]
+    with open("Sys.txt","r",encoding="utf-8-sig") as f:
+        for i in f:
+            lg.append(i.strip().split(","))
+    x1=x.get()
+    y1=y.get()
+    if len(x1)==0 or x1 in [j[0] for j in lg]:
+        x.configure(bg="Red")
+    else:
+        x.configure(bg="Gray")
+    if y1==x1 or y1 in [j[0] for j in lg]:
+        y.configure(bg="Red")
+    else:
+        y.configure(bg="Gray")
+
+def mut():
+    lg=[]
+    with open("Sys.txt","r",encoding="utf-8-sig") as f:
+        for i in f:
+            lg.append(i.strip().split(","))
+    global var
+    nwin=Tk()
+    nwin.geometry("600x600")
+    nwin.title("Muuda nimi") 
+    lblt=Label(nwin,text="Muuda nimi",font="Arial 20")
+    lbln=Label(nwin,text="Kirjuta praegune nimi",font="Arial 20")
+    entn=Entry(nwin,bg="Gray",fg="Black",font="Arial 20")
+    lblnn=Label(nwin,text="Kirjuta uus nimi",font="Arial 20")
+    entnn=Entry(nwin,bg="Gray",fg="Black",font="Arial 20") 
+    btnv=Button(nwin,bg="Gray",fg="Black",font="Arial 20", command=lambda: mutfunc(entn,entnn)) 
+    lblt.pack(pady=50)
+    lst=[lbln,entn,lblnn,entnn,btnv]
+    for item in lst:
+        item.pack()
+
+    nwin.mainloop()
+
+def lug(lst,entx,enty,win,o):
+    x=entx.get()
+    y=enty.get()
+    msx=[]
+    msy=[]
+    for i in lst: 
+        msx.append(i[0])
+    for i in lst:
+        msy.append(i[1])
+    if x in msx:
+        entx.configure(bg="White")
+    else:
+        entx.configure(bg="Red")
+    if y in msy:
+        enty.configure(bg="White")
+    else:
+        enty.configure(bg="Red")
+    if x in msx and y in msy and o==1: 
+        win.destroy()
+        sis=Tk()
+        sis.geometry("500x500")
+        sis.title("Welcome!")
+        lblsis=Label(sis,text="Te olete süsteemis!",font="Arial 30")
+        lblsis.pack(pady=100)
+        sis.mainloop()
+    elif x in msx and y in msy and o==0: 
+        bt=Button(win,text="Muuda nimi",font="Arial 20",fg="Black",bg="Gray",command=mut)
+        bt.pack(side=LEFT)
+
+def kontrol(x,y,z,i,btn):
+    lg=[]
+    with open("Sys.txt","r",encoding="utf-8-sig") as f:
+        for o in f:
+            lg.append(o.strip().split(","))
     p1=x.get()
     p2=y.get()
     n=z.get()
@@ -48,7 +125,7 @@ def kontrol(x,y,z,i,reg):
         y.configure(bg="Red")
     else:
         y.configure(bg="White") 
-    if len(n)==0:
+    if len(n)==0 or n in [j[0] for j in lg]:
         z.configure(bg="Red")
     else:
         z.configure(bg="White") 
@@ -56,22 +133,26 @@ def kontrol(x,y,z,i,reg):
         i.configure(bg="Red")
     else:
         i.configure(bg="White") 
-    c=fulk(x,y,z)
+    c=fulk(x,y,z,i)
     if c==True:
-        a=p1+","+n+","+","+s+"\n"
+        btn.destroy()
+        a=n+","+p1+","+s+"\n"
         with open("Sys.txt","a",encoding="utf-8-sig") as f:
             f.write(a)
-        reg.destroy()
 
-def stul(event):
-    v=var.get()
+def stul(win=None):
+    if win: win.destroy()
+    global var
+    v=var.get() 
+    lg=[]
+    with open("Sys.txt","r",encoding="utf-8-sig") as f:
+        for i in f:
+            lg.append(i.strip().split(","))
     if v==1:
-        win.destroy()
-
         reg=Tk()
-        reg.geometry("600x600")
+        reg.geometry("600x800")
         reg.title("Registreerimine")
-
+        var=IntVar()
         lbl=Label(reg,text="Registreerimine",font="Arial 50",fg="Black")
         lblrename=Label(reg,text="Name: ",font="Arial 20",fg="Black")
         entrename=Entry(reg,font="Arial 20")
@@ -81,47 +162,48 @@ def stul(event):
         entconfrepass=Entry(reg,show="*",font="Arial 20",bg="White")
         lblsec=Label(reg,text="Salajane sõna: ",font="Arial 20",fg="Black")
         entsec=Entry(reg,font="Arial 20",bg="White")
-        btnval=Button(reg,text="Valmis",font="Arial 20",fg="Black",bg="Gray",command=lambda: kontrol(entrepass,entconfrepass,entrename,entsec,reg))
+        btnval=Button(reg,text="Valmis",font="Arial 20",fg="Black",bg="Gray",command=lambda: kontrol(entrepass,entconfrepass,entrename,entsec,btnval))
+        rlog=Radiobutton(reg,text="Autoriseerimine",font="Arial 20",fg="Blue",variable=var,value=2)
+        blog=Button(reg,text="Autoriseerimine",font="Arial 20",fg="Blue",bg="Gray", command=lambda: stul(reg))
 
         lst=[lbl,lblrename,entrename,lblrepass,entrepass,lblconfrepass,entconfrepass,lblsec,entsec,btnval]
         for i in range(len(lst)):
             lst[i].pack(pady=50) if i==0 else (lst[i].pack() if i!=9 else lst[i].pack(pady=20))
-
+        rlog.pack(side=LEFT)
+        blog.pack(side=LEFT)
         reg.mainloop()
 
-    if v==2 or i==1:
-        win.destroy()
+    if v==2:
         log=Tk()
         log.geometry("600x600")
         log.title("Autoriseerimine")
         lbl=Label(log,text="Autoriseerimine",font="Arial 50",fg="Black")
-        lblrename=Label(log,text="Name: ",font="Arial 20",fg="Black")
-        entrename=Entry(log,font="Arial 20")
-        lblrepass=Label(log,text="Password: ",font="Arial 20",fg="Black")
-        entrepass=Entry(log,show="*",font="Arial 20")
-        btnval=Button(log,text="Valmis",font="Arial 20",fg="Black",bg="Gray")
-        lst=[lbl,lblrename,entrename,lblrepass,entrepass,btnval]
+        lblloname=Label(log,text="Name: ",font="Arial 20",fg="Black")
+        entloname=Entry(log,font="Arial 20")
+        lbllopass=Label(log,text="Password: ",font="Arial 20",fg="Black")
+        entlopass=Entry(log,show="*",font="Arial 20")
+        btnval=Button(log,text="Valmis",font="Arial 20",fg="Black",bg="Gray", command=lambda: lug(lg,entloname,entlopass,log,1))
+        lst=[lbl,lblloname,entloname,lbllopass,entlopass,btnval]
         for i in range(len(lst)):
             lst[i].pack(pady=50) if i==0 else (lst[i].pack() if i!=5 else lst[i].pack(pady=20))
         log.mainloop()
 
     if v==3:
-        win.destroy()
         mut=Tk()
         mut.geometry("1200x600")
         mut.title("Nime või parooli muutmine")
         lbl=Label(mut,text="Nime või parooli muutmine",font="Arial 50",fg="Black")
-        lblrename=Label(mut,text="Name: ",font="Arial 20",fg="Black")
-        entrename=Entry(mut,font="Arial 20")
-        lblrepass=Label(mut,text="Password: ",font="Arial 20",fg="Black")
-        entrepass=Entry(mut,show="*",font="Arial 20")
-        btnval=Button(mut,text="Valmis muutmine",font="Arial 20",fg="Black",bg="Gray")
-        lst=[lbl,lblrename,entrename,lblrepass,entrepass,btnval]
+        lblmuname=Label(mut,text="Name: ",font="Arial 20",fg="Black")
+        entmuname=Entry(mut,font="Arial 20")
+        lblmupass=Label(mut,text="Password: ",font="Arial 20",fg="Black")
+        entmupass=Entry(mut,show="*",font="Arial 20")
+        btnval=Button(mut,text="Kontrolli konto",font="Arial 20",fg="Black",bg="Gray",command=lambda: lug(lg,entmuname,entmupass,mut,0))
+        lst=[lbl,lblmuname,entmuname,lblmupass,entmupass,btnval]
         for i in range(len(lst)):
             lst[i].pack(pady=50) if i==0 else (lst[i].pack() if i!=5 else lst[i].pack(pady=20))
         mut.mainloop()
     if v==4:
-        win.destroy()
+        print()
 
 def lop(event):
     win.destroy()
@@ -137,10 +219,9 @@ rbreg=Radiobutton(win,text="Registreerimine",font="Arial 30",fg="Green",variable
 rblog=Radiobutton(win,text="Autoriseerimine",font="Arial 30",fg="Blue",variable=var,value=2)
 rbmut=Radiobutton(win,text="Nime või parooli muutmine",font="Arial 30",fg="Orange",variable=var,value=3)
 rbun=Radiobutton(win,text="Unustanud parooli taastamine",font="Arial 30",fg="Orange",variable=var,value=4)
-btngo=Button(win,text="Alusta",font="Arial 30",fg="Black",bg="Green")
+btngo=Button(win,text="Alusta",font="Arial 30",fg="Black",bg="Green", command=lambda: stul(win))
 btnlop=Button(win,text="Lõpetamine",font="Arial 30",fg="Black",bg="Red")
 
-btngo.bind("<Button-1>",stul)
 btnlop.bind("<Button-1>",lop)
 
 lst=[lbl,rblog,rbreg,rbmut,rbun,btnlop,btngo]
