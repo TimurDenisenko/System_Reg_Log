@@ -24,6 +24,16 @@
     <Compile Include="System_Reg_Log.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="2_8.png" />
+    <Content Include="crocus.ico" />
+    <Content Include="door.ico" />
+    <Content Include="gk.ico" />
+    <Content Include="gk.png" />
+    <Content Include="door.png" />
+    <Content Include="kubrub.png" />
+    <Content Include="redk.png" />
+    <Content Include="robot.ico" />
+    <Content Include="robot.png" />
     <Content Include="Sys.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
