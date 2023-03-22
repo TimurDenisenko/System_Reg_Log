@@ -25,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="2_8.png" />
+    <Content Include="70083.png" />
     <Content Include="crocus.ico" />
     <Content Include="door.ico" />
     <Content Include="gk.ico" />
