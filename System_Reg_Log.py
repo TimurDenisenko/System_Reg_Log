@@ -70,17 +70,18 @@ def mutfunc(x,y,m):
         with open("Sys.txt","w",encoding="utf-8-sig") as f:
             f.writelines(lg1)
 
-def mut():
+def mut(x):
     lg=file()
     nwin=Tk()
-    nwin.geometry("600x600")
+    nwin.geometry("600x800")
     nwin.title("Muuda nimi") 
-    lblt=Label(nwin,text="Muuda nimi",font="Arial 20")
+    lblt=Label(nwin,text="Muuda nimi",font="Arial 40")
     lbln=Label(nwin,text="Kirjuta praegune nimi",font="Arial 20")
     entn=Entry(nwin,bg="White",fg="Black",font="Arial 20")
     lblnn=Label(nwin,text="Kirjuta uus nimi",font="Arial 20")
     entnn=Entry(nwin,bg="White",fg="Black",font="Arial 20") 
-    btnv=Button(nwin,text="Muuda",bg="Gray",fg="Black",font="Arial 20", command=lambda: mutfunc(entn,entnn,0)) 
+    btnk=Button(nwin,bg="Orange",fg="White",font="Arial 20")
+    btnv=Button(nwin,text="Muuda",bg="Orange",fg="White",font="Arial 20", command=lambda: mutfunc(entn,entnn,0)) 
     lblt.pack(pady=50)
     lst=[lbln,entn,lblnn,entnn,btnv]
     for item in lst:
@@ -88,17 +89,28 @@ def mut():
 
     nwin.mainloop()
 
-def mut1():
+def kntl(x,entp,win,entn,entnn,n,btn):
+    p=entp.get()
+    if x!=entp:
+        entp.configure(bg="Red")
+    else:
+        entp.configure(bg="white")
+
+        btnv=Button(win,text="Muuda",bg="Orange",fg="white",font="Arial 20", command=lambda: mutfunc(entn,entnn,n)) 
+
+
+
+def mut1(y):
     lg=file()
     nwin=Tk()
-    nwin.geometry("600x600")
+    nwin.geometry("600x800")
     nwin.title("Muuda parool") 
-    lblt=Label(nwin,text="Muuda parool",font="Arial 20")
+    lblt=Label(nwin,text="Muuda parool",font="Arial 40")
     lbln=Label(nwin,text="Kirjuta praegune parool",font="Arial 20")
-    entn=Entry(nwin,bg="White",fg="Black",font="Arial 20")
+    entn=Entry(nwin,bg="White",show="*",fg="Black",font="Arial 20")
     lblnn=Label(nwin,text="Kirjuta uus parool",font="Arial 20")
-    entnn=Entry(nwin,bg="White",fg="Black",font="Arial 20") 
-    btnv=Button(nwin,text="Muuda",bg="Gray",fg="Black",font="Arial 20", command=lambda: mutfunc(entn,entnn,1)) 
+    entnn=Entry(nwin,bg="White",show="*",fg="Black",font="Arial 20") 
+    btnv=Button(nwin,text="Muuda",bg="Orange",fg="white",font="Arial 20", command=lambda: mutfunc(entn,entnn,1)) 
     lblt.pack(pady=50)
     lst=[lbln,entn,lblnn,entnn,btnv]
     for item in lst:
@@ -133,8 +145,8 @@ def lug(lst,entx,enty,win,o,but=None):
         sis.mainloop()
     elif x in msx and y in msy and o==0: 
         but.destroy()
-        bt=Button(win,text="Muuda nimi",font="Arial 20",width=12,fg="white",bg="orange",command=mut)
-        bt1=Button(win,text="Muuda parool",font="Arial 20",width=12,fg="white",bg="orange",command=mut1)
+        bt=Button(win,text="Muuda nimi",font="Arial 20",width=12,fg="white",bg="orange",command=lambda: mut(x))
+        bt1=Button(win,text="Muuda parool",font="Arial 20",width=12,fg="white",bg="orange",command=lambda: mut1(y))
         bt.pack(side=LEFT,padx=65)
         bt1.pack(side=LEFT)
 
